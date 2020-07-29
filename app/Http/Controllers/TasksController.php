@@ -61,6 +61,10 @@ class TasksController extends Controller
     // putまたはpatchでtasks/idにアクセスされた場合の「更新処理」
     public function update(Request $request, $id)
     {
+        $this->validate($request, [
+            'content' => 'required|max:191',
+        ]);
+
         $task = task::find($id);
         $task->content = $request->content;
         $task->save();
@@ -69,10 +73,15 @@ class TasksController extends Controller
     }
 
         // deleteでtasks/idにアクセスされた場合の「削除処理」
-    public function destroy($id)
+        public function store(Request $request)
     {
-        $task = task::find($id);
-        $task->delete();
+        $this->validate($request, [
+            'content' => 'required|max:191',
+        ]);
+
+        $task = new task;
+        $task->content = $request->content;
+        $task->save();
 
         return redirect('/');
     }
