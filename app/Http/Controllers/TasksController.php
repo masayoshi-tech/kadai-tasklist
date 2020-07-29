@@ -31,7 +31,13 @@ class TasksController extends Controller
     // postでtasks/にアクセスされた場合の「新規登録処理」
     public function store(Request $request)
     {
+        $this->validate($request, [
+            'title' => 'required|max:191',   // 追加
+            'content' => 'required|max:191',
+        ]);
+
         $task = new task;
+        $task->title = $request->title;    // 追加
         $task->content = $request->content;
         $task->save();
 
@@ -62,10 +68,12 @@ class TasksController extends Controller
     public function update(Request $request, $id)
     {
         $this->validate($request, [
+            'title' => 'required|max:191',   // 追加
             'content' => 'required|max:191',
         ]);
 
         $task = task::find($id);
+        $task->title = $request->title;    // 追加
         $task->content = $request->content;
         $task->save();
 
